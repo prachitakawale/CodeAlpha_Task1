@@ -1,0 +1,86 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Student {
+    String name;
+    double score;
+
+    Student(String name, double score) {
+        this.name = name;
+        this.score = score;
+    }
+}
+
+public class StudentGradesManager {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        ArrayList<Student> students = new ArrayList<>();
+
+        System.out.println("Welcome to the Student Grades Manager!");
+        System.out.println("---------------------------------------");
+
+        // Input loop
+        while (true) {
+            System.out.print("Enter student name (or type 'done' to finish): ");
+            String name = scanner.nextLine();
+
+            if (name.equalsIgnoreCase("done")) {
+                break;
+            }
+
+            System.out.print("Enter " + name + "'s score: ");
+            double score;
+
+            try {
+                score = Double.parseDouble(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a numeric score.");
+                continue;
+            }
+
+            students.add(new Student(name, score));
+        }
+
+        if (students.isEmpty()) {
+            System.out.println("No students were entered.");
+            return;
+        }
+
+        // Processing statistics
+        double total = 0;
+        double highest = Double.MIN_VALUE;
+        double lowest = Double.MAX_VALUE;
+        Student topStudent = null;
+        Student lowStudent = null;
+
+        for (Student s : students) {
+            total += s.score;
+
+            if (s.score > highest) {
+                highest = s.score;
+                topStudent = s;
+            }
+
+            if (s.score < lowest) {
+                lowest = s.score;
+                lowStudent = s;
+            }
+        }
+
+        double average = total / students.size();
+
+        // Summary Report
+        System.out.println("\nSummary Report:");
+        System.out.println("------------------------");
+
+        for (Student s : students) {
+            System.out.printf("%s: %.2f\n", s.name, s.score);
+        }
+
+        System.out.println("\nClass Average: " + String.format("%.2f", average));
+        System.out.println("Highest Score: " + topStudent.name + " (" + topStudent.score + ")");
+        System.out.println("Lowest Score: " + lowStudent.name + " (" + lowStudent.score + ")");
+    }
+}
